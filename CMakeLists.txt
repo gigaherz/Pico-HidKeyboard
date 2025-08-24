@@ -41,7 +41,7 @@ pico_set_program_name(HidKeyboard "HidKeyboard")
 pico_set_program_version(HidKeyboard "0.1")
 
 # no_flash means the target is to run from RAM
-pico_set_binary_type(HidKeyboard no_flash)
+#pico_set_binary_type(HidKeyboard flash)
 
 # Modify the below lines to enable/disable output over UART/USB
 pico_enable_stdio_uart(HidKeyboard 0)
