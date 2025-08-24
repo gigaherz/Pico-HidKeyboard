@@ -1,0 +1,115 @@
+#pragma once
+#include <stdint.h>
+#include "tusb.h"
+
+typedef enum HID_Keys_t : uint8_t {
+    // Numbers
+    KEY_1 = HID_KEY_1,
+    KEY_2 = HID_KEY_2,
+    KEY_3 = HID_KEY_3,
+    KEY_4 = HID_KEY_4,
+    KEY_5 = HID_KEY_5,
+    KEY_6 = HID_KEY_6,
+    KEY_7 = HID_KEY_7,
+    KEY_8 = HID_KEY_8,
+    KEY_9 = HID_KEY_9,
+    KEY_0 = HID_KEY_0,
+
+    // Letters
+    KEY_Q = HID_KEY_Q,
+    KEY_W = HID_KEY_W,
+    KEY_E = HID_KEY_E,
+    KEY_R = HID_KEY_R,
+    KEY_T = HID_KEY_T,
+    KEY_Y = HID_KEY_Y,
+    KEY_U = HID_KEY_U,
+    KEY_I = HID_KEY_I,
+    KEY_O = HID_KEY_O,
+    KEY_P = HID_KEY_P,
+    KEY_A = HID_KEY_A,
+    KEY_S = HID_KEY_S,
+    KEY_D = HID_KEY_D,
+    KEY_F = HID_KEY_F,
+    KEY_G = HID_KEY_G,
+    KEY_H = HID_KEY_H,
+    KEY_J = HID_KEY_J,
+    KEY_K = HID_KEY_K,
+    KEY_L = HID_KEY_L,
+    KEY_Z = HID_KEY_Z,
+    KEY_X = HID_KEY_X,
+    KEY_C = HID_KEY_C,
+    KEY_V = HID_KEY_V,
+    KEY_B = HID_KEY_B,
+    KEY_N = HID_KEY_N,
+    KEY_M = HID_KEY_M,
+
+    // Symbols
+    KEY_SPACE = HID_KEY_SPACE, 
+    KEY_TAB = HID_KEY_TAB,
+    KEY_EQUAL = HID_KEY_EQUAL,
+    KEY_LEFT_BRACE = HID_KEY_BRACKET_LEFT,
+    KEY_RIGHT_BRACE = HID_KEY_BRACKET_RIGHT,
+    KEY_BACKSLASH = HID_KEY_BACKSLASH,
+    KEY_CAPS_LOCK = HID_KEY_CAPS_LOCK,
+    KEY_SEMICOLON = HID_KEY_SEMICOLON,
+    KEY_QUOTE = HID_KEY_APOSTROPHE,
+    KEY_COMMA = HID_KEY_COMMA,
+    KEY_PERIOD = HID_KEY_PERIOD,
+    KEY_SLASH = HID_KEY_SLASH,
+
+    // Modifiers
+    KEY_LEFT_SHIFT = HID_KEY_SHIFT_LEFT,
+    KEY_RIGHT_SHIFT = HID_KEY_SHIFT_RIGHT,
+    KEY_LEFT_CTRL = HID_KEY_CONTROL_LEFT,
+    KEY_RIGHT_CTRL = HID_KEY_CONTROL_RIGHT,
+    KEY_LEFT_ALT = HID_KEY_ALT_LEFT,
+    KEY_RIGHT_ALT = HID_KEY_ALT_RIGHT,
+
+    // Control
+    KEY_RETURN = HID_KEY_RETURN,
+    KEY_BACKSPACE = HID_KEY_BACKSPACE,
+    KEY_ESC = HID_KEY_ESCAPE,
+    KEY_LEFT_WINDOWS = HID_KEY_GUI_LEFT,
+    KEY_RIGHT_WINDOWS = HID_KEY_GUI_RIGHT,
+    KEY_MENU = HID_KEY_MENU,
+
+    // Arrows
+    KEY_UP_ARROW = HID_KEY_ARROW_UP,
+    KEY_LEFT_ARROW = HID_KEY_ARROW_LEFT,
+    KEY_DOWN_ARROW = HID_KEY_ARROW_DOWN,
+    KEY_RIGHT_ARROW = HID_KEY_ARROW_RIGHT,
+
+    // Media
+    KEY_CUT = HID_KEY_CUT,
+    KEY_COPY = HID_KEY_COPY,
+    KEY_PASTE = HID_KEY_PASTE,
+    KEY_FIND = HID_KEY_FIND,
+    KEY_VOLUME_MUTE = HID_KEY_MUTE,
+    KEY_VOLUME_DOWN = HID_KEY_VOLUME_DOWN,
+    KEY_VOLUME_UP = HID_KEY_VOLUME_UP,
+
+    KEY__COUNT
+} HID_Keys;
+
+typedef enum HID_Consumer_t : uint16_t {
+    CONSUMER_BRIGHTNESS_DOWN = HID_USAGE_CONSUMER_BRIGHTNESS_DECREMENT,
+    CONSUMER_BRIGHTNESS_UP = HID_USAGE_CONSUMER_BRIGHTNESS_INCREMENT,
+    MEDIA_PREV = HID_USAGE_CONSUMER_SCAN_PREVIOUS,
+    MEDIA_PLAY_PAUSE = HID_USAGE_CONSUMER_PLAY_PAUSE,
+    MEDIA_NEXT = HID_USAGE_CONSUMER_SCAN_NEXT,
+
+    CONSUMER__COUNT
+} HID_Consumer;
+
+class Mapping 
+{
+public:
+    // Called by Scan.cpp
+    static void KeyStateChange(KeyCode kc, bool state);
+
+    // Called by main.cpp
+    static bool KeyboardChanged();
+    static bool ConsumerChanged();
+    static const uint8_t* GetKeyboard();
+    static const uint16_t* GetConsumer();
+};

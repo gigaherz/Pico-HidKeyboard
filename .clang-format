@@ -1,0 +1,7 @@
+---
+# We'll use defaults from the LLVM style, but with 4 columns indentation.
+BasedOnStyle: Microsoft
+---
+Language: Cpp
+BreakArrays: false
+ColumnLimit: 0

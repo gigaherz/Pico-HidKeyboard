@@ -35,7 +35,7 @@ pico_sdk_init()
 
 # Add executable. Default name is the project name, version 0.1
 
-add_executable(HidKeyboard HidKeyboard.c )
+add_executable(HidKeyboard main.cpp usb_descriptors.cpp Scan.cpp Mapping.cpp)
 
 pico_set_program_name(HidKeyboard "HidKeyboard")
 pico_set_program_version(HidKeyboard "0.1")
@@ -49,7 +49,10 @@ pico_enable_stdio_usb(HidKeyboard 0)
 
 # Add the standard library to the build
 target_link_libraries(HidKeyboard
-        pico_stdlib)
+        pico_stdlib pico_unique_id tinyusb_device tinyusb_board)
+
+# Uncomment this line to enable fix for Errata RP2040-E5 (the fix requires use of GPIO 15)
+#target_compile_definitions(dev_hid_composite PUBLIC PICO_RP2040_USB_DEVICE_ENUMERATION_FIX=1)
 
 # Add the standard include files to the build
 target_include_directories(HidKeyboard PRIVATE
@@ -62,4 +65,3 @@ target_link_libraries(HidKeyboard
         )
 
 pico_add_extra_outputs(HidKeyboard)
-
