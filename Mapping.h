@@ -2,7 +2,7 @@
 #include <stdint.h>
 #include "tusb.h"
 
-typedef enum HID_Keys_t : uint8_t {
+enum HID_Keys_t {
     // Numbers
     KEY_1 = HID_KEY_1,
     KEY_2 = HID_KEY_2,
@@ -57,14 +57,6 @@ typedef enum HID_Keys_t : uint8_t {
     KEY_PERIOD = HID_KEY_PERIOD,
     KEY_SLASH = HID_KEY_SLASH,
 
-    // Modifiers
-    KEY_LEFT_SHIFT = HID_KEY_SHIFT_LEFT,
-    KEY_RIGHT_SHIFT = HID_KEY_SHIFT_RIGHT,
-    KEY_LEFT_CTRL = HID_KEY_CONTROL_LEFT,
-    KEY_RIGHT_CTRL = HID_KEY_CONTROL_RIGHT,
-    KEY_LEFT_ALT = HID_KEY_ALT_LEFT,
-    KEY_RIGHT_ALT = HID_KEY_ALT_RIGHT,
-
     // Control
     KEY_RETURN = HID_KEY_RETURN,
     KEY_BACKSPACE = HID_KEY_BACKSPACE,
@@ -84,32 +76,34 @@ typedef enum HID_Keys_t : uint8_t {
     KEY_COPY = HID_KEY_COPY,
     KEY_PASTE = HID_KEY_PASTE,
     KEY_FIND = HID_KEY_FIND,
-    KEY_VOLUME_MUTE = HID_KEY_MUTE,
-    KEY_VOLUME_DOWN = HID_KEY_VOLUME_DOWN,
-    KEY_VOLUME_UP = HID_KEY_VOLUME_UP,
+};
 
-    KEY__COUNT
-} HID_Keys;
+enum HID_Modifiers_t {
+    // Modifiers
+    MOD_LEFT_SHIFT = KEYBOARD_MODIFIER_LEFTSHIFT,
+    MOD_RIGHT_SHIFT = KEYBOARD_MODIFIER_RIGHTSHIFT,
+    MOD_LEFT_CTRL = KEYBOARD_MODIFIER_LEFTCTRL,
+    MOD_RIGHT_ALT = KEYBOARD_MODIFIER_RIGHTALT,
+ };
 
-typedef enum HID_Consumer_t : uint16_t {
+enum HID_Consumer_t {
     CONSUMER_BRIGHTNESS_DOWN = HID_USAGE_CONSUMER_BRIGHTNESS_DECREMENT,
     CONSUMER_BRIGHTNESS_UP = HID_USAGE_CONSUMER_BRIGHTNESS_INCREMENT,
     MEDIA_PREV = HID_USAGE_CONSUMER_SCAN_PREVIOUS,
     MEDIA_PLAY_PAUSE = HID_USAGE_CONSUMER_PLAY_PAUSE,
     MEDIA_NEXT = HID_USAGE_CONSUMER_SCAN_NEXT,
-
-    CONSUMER__COUNT
-} HID_Consumer;
-
-class Mapping 
-{
-public:
-    // Called by Scan.cpp
-    static void KeyStateChange(KeyCode kc, bool state);
-
-    // Called by main.cpp
-    static bool KeyboardChanged();
-    static bool ConsumerChanged();
-    static const uint8_t* GetKeyboard();
-    static const uint16_t* GetConsumer();
+    
+    CONSUMER_VOLUME_MUTE = HID_USAGE_CONSUMER_MUTE,
+    CONSUMER_VOLUME_DOWN = HID_USAGE_CONSUMER_VOLUME_DECREMENT,
+    CONSUMER_VOLUME_UP = HID_USAGE_CONSUMER_VOLUME_INCREMENT
 };
+
+// Called by Scan.cpp
+void Mapping__KeyStateChange(KeyCode kc, bool state);
+
+// Called by main.cpp
+void Mapping__Init();
+bool Mapping__PendingChanges();
+const uint8_t* Mapping__GetKeyboard();
+const uint16_t* Mapping__GetConsumer();
+uint8_t Mapping__GetModifiers();

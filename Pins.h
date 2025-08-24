@@ -19,14 +19,6 @@
 #define RIBBON_17 4
 #define RIBBON_18 5
 
-const int cols[] = {
-  RIBBON_17, RIBBON_8, RIBBON_6, RIBBON_15, RIBBON_12, RIBBON_11, RIBBON_9, RIBBON_7, RIBBON_5, RIBBON_4, RIBBON_3, RIBBON_2, RIBBON_1
-};
-const int COLS = countof(cols);
-
-const int rows[] = {
-  RIBBON_10, RIBBON_13, RIBBON_14, RIBBON_16, RIBBON_18
-};
-const int ROWS = countof(rows);
-
-const int MATRIX_SIZE = COLS * ROWS;
+#define COLS 13
+#define ROWS 5
+#define MATRIX_SIZE 65

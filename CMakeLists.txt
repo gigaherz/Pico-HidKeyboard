@@ -35,7 +35,7 @@ pico_sdk_init()
 
 # Add executable. Default name is the project name, version 0.1
 
-add_executable(HidKeyboard main.cpp usb_descriptors.cpp Scan.cpp Mapping.cpp)
+add_executable(HidKeyboard main.c usb_descriptors.c Scan.c Mapping.c)
 
 pico_set_program_name(HidKeyboard "HidKeyboard")
 pico_set_program_version(HidKeyboard "0.1")

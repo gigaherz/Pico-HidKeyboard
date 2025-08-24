@@ -1,9 +1,17 @@
-#include "Common.hpp"
-#include "Pins.hpp"
+#include "Common.h"
+#include "Pins.h"
 #include "hardware/gpio.h"
 #include "hardware/timer.h"
 #include "pico/stdlib.h"
 #include "bsp/board_api.h"
+
+const int cols[COLS] = {
+  RIBBON_17, RIBBON_8, RIBBON_6, RIBBON_15, RIBBON_12, RIBBON_11, RIBBON_9, RIBBON_7, RIBBON_5, RIBBON_4, RIBBON_3, RIBBON_2, RIBBON_1
+};
+
+const int rows[ROWS] = {
+  RIBBON_10, RIBBON_13, RIBBON_14, RIBBON_16, RIBBON_18
+};
 
 const int DEBOUNCE_TIME = 5;
 
@@ -13,7 +21,7 @@ typedef struct key_state_t
     uint8_t count : 7;
 } key_state;
 
-key_state last_state[MATRIX_SIZE];
+static key_state last_state[MATRIX_SIZE];
 
 #define OUTPUT 0
 #define INPUT 1
@@ -55,18 +63,14 @@ static inline bool digitalRead(int pin)
     return gpio_get(pin);
 }
 
-//static bool timer_callback(__unused repeating_timer_t *rt);
-
-//repeating_timer_t timer;
-
-bool Scan::IsDown(KeyCode kc)
+bool Scan__IsDown(KeyCode kc)
 {
     if (kc >= 0 && kc <= MATRIX_SIZE)
         return last_state[kc].state;
     return false;
 }
 
-void Scan::Start()
+void Scan__Init()
 {
     for (int i = 0; i < COLS; i++)
     {
@@ -79,22 +83,12 @@ void Scan::Start()
         pinMode(pin, OUTPUT);
         digitalWrite(pin, 1);
     }
-    for (int i = 0; i < MATRIX_SIZE; i++)
-    {
-        last_state[i] = {0, 0};
-    }
-
-    // negative timeout means exact delay (rather than delay between callbacks)
-    //add_repeating_timer_us(-1000, timer_callback, NULL, &timer);
-}
-void Scan::Stop()
-{
-  //cancel_repeating_timer(&timer);
+    memset(last_state, 0, sizeof(last_state));
 }
 
-//static bool timer_callback(__unused repeating_timer_t *rt)
-void Scan::Tick()
+bool Scan__Tick()
 {
+    bool activity = false;
     for (int i = 0; i < ROWS; i++)
     {
         int pin_r = rows[i];
@@ -114,8 +108,10 @@ void Scan::Tick()
                 old_state.count++;
                 if (old_state.count >= DEBOUNCE_TIME)
                 {
-                    old_state = {state, 0};
-                    Mapping::KeyStateChange((KeyCode)kc, state);
+                    old_state.state = state;
+                    old_state.count = 0;
+                    Mapping__KeyStateChange((KeyCode)kc, state);
+                    activity = true;
                 }
             }
             else
@@ -126,5 +122,5 @@ void Scan::Tick()
         }
         digitalWrite(pin_r, 1);
     }
-    //return true;
+    return activity;
 }

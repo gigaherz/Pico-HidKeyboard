@@ -1,9 +1,8 @@
 #pragma once
+#include <stdbool.h>
 #include <stdint.h>
 
-#define countof(a) (sizeof(a) / sizeof(a[0]))
-
-typedef enum KeyCode_t : uint8_t {
+typedef enum KeyCode_t {
   KC_TAB = 0, KC_1, KC_2, KC_3, KC_4, KC_5, KC_6, KC_7, KC_8, KC_9, KC_0, KC_EQUALS, KC_BACKSPACE,
   KC_Q, KC_W, KC_E, KC_R, KC_T, KC_Y, KC_U, KC_I, KC_O, KC_P, KC_KBRACE, KC_RBRACE, KC_BACKSLASH,
   KC_CAPS_LOCK, KC_A, KC_S, KC_D, KC_F, KC_G, KC_H, KC_J, KC_K, KC_L, KC_SEMICOLON, KC_QUOTE, KC_RETURN,
@@ -12,13 +11,9 @@ typedef enum KeyCode_t : uint8_t {
   KC___COUNT
 } KeyCode;
 
-class Scan {
-public:
-    // Called from main.cpp
-    static void Start();
-    static void Stop();
-    static void Tick();
+// Called from main.cpp
+void Scan__Init();
+bool Scan__Tick();
 
-    // Called from Mapping.cpp
-    static bool IsDown(KeyCode kc);
-};
+// Called from Mapping.cpp
+bool Scan__IsDown(KeyCode kc);
