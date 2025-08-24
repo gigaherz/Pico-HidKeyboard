@@ -1,6 +1,6 @@
 # Pico HidKeyboard
 
-Licensed under the MIT license. See [LICENSE.txt].
+Licensed under the MIT license. See [LICENSE.txt](LICENSE.txt).
 
 A HID Keyboard implemented using a Raspberry Pi Pico.
 
