@@ -54,9 +54,9 @@ typedef struct key_def_t
 const key_def key_codes[MATRIX_SIZE] = {
     N(KEY_TAB), N(KEY_1), N(KEY_2), N(KEY_3), N(KEY_4), N(KEY_5), N(KEY_6), N(KEY_7), N(KEY_8), N(KEY_9), N(KEY_0), N(KEY_EQUAL), N(KEY_BACKSPACE),                                             //
     N(KEY_Q), N(KEY_W), N(KEY_E), N(KEY_R), N(KEY_T), N(KEY_Y), N(KEY_U), N(KEY_I), N(KEY_O), N(KEY_P), N(KEY_LEFT_BRACE), N(KEY_RIGHT_BRACE), N(KEY_BACKSLASH),                                //
-    N(KEY_CAPS_LOCK), N(KEY_A), N(KEY_S), N(KEY_D), N(KEY_F), N(KEY_G), N(KEY_H), N(KEY_J), N(KEY_K), N(KEY_L), N(KEY_SEMICOLON), N(KEY_QUOTE), N(KEY_RETURN),                                  //
+    N(KEY_CAPS_LOCK), N(KEY_A), N(KEY_S), N(KEY_D), N(KEY_F), N(KEY_G), N(KEY_H), N(KEY_J), N(KEY_K), N(KEY_L), N(KEY_SEMICOLON), N(KEY_QUOTE), N(KEY_ENTER),                                  //
     M(MOD_LEFT_SHIFT), N(KEY_Z), N(KEY_X), N(KEY_C), N(KEY_V), N(KEY_B), N(KEY_N), N(KEY_M), N(KEY_COMMA), N(KEY_PERIOD), N(KEY_SLASH), N(KEY_UP_ARROW), M(MOD_RIGHT_SHIFT),                    //
-    SPECIAL("KEY_FN"), M(MOD_LEFT_CTRL), N(KEY_ESC), N(KEY_LEFT_WINDOWS), N(KEY_SPACE), NOKEY, NOKEY, NOKEY, NOKEY, M(MOD_RIGHT_ALT), N(KEY_LEFT_ARROW), N(KEY_DOWN_ARROW), N(KEY_RIGHT_ARROW), //
+    SPECIAL("Fn"), M(MOD_LEFT_CTRL), N(KEY_ESC), N(KEY_LEFT_WINDOWS), N(KEY_SPACE), NOKEY, NOKEY, NOKEY, NOKEY, M(MOD_RIGHT_ALT), N(KEY_LEFT_ARROW), N(KEY_DOWN_ARROW), N(KEY_RIGHT_ARROW), //
 };
 
 const key_def key_codes_fn[MATRIX_SIZE] = {
@@ -76,31 +76,33 @@ const key_def key_codes_fn_shift[MATRIX_SIZE] = {
 };
 
 const uint8_t keys_error_report[6] = {1,1,1,1,1,1};
-uint8_t keys_down[80];
+uint8_t keys_down[100];
 int keys_down_c = 0;
 bool keys_down_e = false;
 bool changes = false;
 uint8_t keys_modifier_bits;
 
 const uint16_t consumer_error_report[1] = {0};
-uint16_t consumer_down[6];
+uint16_t consumer_down[10];
 int consumer_down_c = 0;
 bool consumer_down_e = false;
 bool consumer_change = false;
 
-void pressMod(int16_t key)
+void pressMod(uint8_t key)
 {
     keys_modifier_bits |= key;
     changes = true;
 }
-void releaseMod(int16_t key)
+void releaseMod(uint8_t key)
 {
     keys_modifier_bits &= ~key;
     changes = true;
 }
 
-void pressKey(int16_t key)
+void pressKey(uint8_t key)
 {
+    if (keys_down_c >= 100) return;
+
     bool found = false;
     for(int i=0;i<keys_down_c;i++)
     {
@@ -119,7 +121,7 @@ void pressKey(int16_t key)
 
     changes = true;
 }
-void releaseKey(int16_t key)
+void releaseKey(uint8_t key)
 {
     int found = -1;
     for(int i=0;i<keys_down_c;i++)
@@ -145,6 +147,8 @@ void releaseKey(int16_t key)
 
 void pressCon(int16_t key)
 {
+    if (consumer_down_c >= 10) return;
+    
     bool found = false;
     for(int i=0;i<consumer_down_c;i++)
     {

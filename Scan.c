@@ -28,6 +28,8 @@
 #include "pico/stdlib.h"
 #include "bsp/board_api.h"
 
+#define USE_PULLDOWN
+
 const int cols[COLS] = {
   RIBBON_17, RIBBON_8, RIBBON_6, RIBBON_15, RIBBON_12, RIBBON_11, RIBBON_9, RIBBON_7, RIBBON_5, RIBBON_4, RIBBON_3, RIBBON_2, RIBBON_1
 };
@@ -98,13 +100,21 @@ void Scan__Init()
     for (int i = 0; i < COLS; i++)
     {
         int pin = cols[i];
+#ifdef USE_PULLDOWN
+        pinMode(pin, INPUT_PULLDOWN);
+#else
         pinMode(pin, INPUT_PULLUP);
+#endif
     }
     for (int i = 0; i < ROWS; i++)
     {
         int pin = rows[i];
         pinMode(pin, OUTPUT);
+#ifdef USE_PULLDOWN
+        digitalWrite(pin, 0);
+#else
         digitalWrite(pin, 1);
+#endif
     }
     memset(last_state, 0, sizeof(last_state));
 }
@@ -115,11 +125,20 @@ bool Scan__Tick()
     for (int i = 0; i < ROWS; i++)
     {
         int pin_r = rows[i];
+#ifdef USE_PULLDOWN
+        digitalWrite(pin_r, 1);
+#else
         digitalWrite(pin_r, 0);
+#endif
+        sleep_us(10);
         for (int j = 0; j < COLS; j++)
         {
             int pin_c = cols[j];
+#ifdef USE_PULLDOWN
+            uint8_t state = digitalRead(pin_c);
+#else
             uint8_t state = !digitalRead(pin_c);
+#endif
             int kc = i * COLS + j;
             if (kc < 0 || kc >= MATRIX_SIZE)
             {
@@ -143,7 +162,11 @@ bool Scan__Tick()
             }
             last_state[kc] = old_state;
         }
+#ifdef USE_PULLDOWN
+        digitalWrite(pin_r, 0);
+#else
         digitalWrite(pin_r, 1);
+#endif
     }
     return activity;
 }
